@@ -1,11 +1,4 @@
-import {
-  Alert,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, SafeAreaView, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { signUp } from '../API/ApiService';
 import { ErrAlert, validateEmail, validatePassword } from '../app/validation';

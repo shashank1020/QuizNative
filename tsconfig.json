@@ -26,7 +26,7 @@
     "target": "es6",
     "baseUrl": "./",
     "types": [
-      "@types/styled-components-react-native"qq
+      "@types/styled-components-react-native",
     ]
   },
   "include": [

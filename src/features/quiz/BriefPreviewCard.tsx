@@ -1,11 +1,12 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { currentUser, Quiz } from './quizSlice';
 import { H3, P1, PrimaryCTA } from '../../assest/Typography';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import { deleteQuiz, updateQuiz } from '../../API/ApiService';
-import { ErrAlert } from '../../app/validation';
+import { ErrAlert, stringPreview } from '../../app/validation';
 import { useAppSelector } from '../../app/hooks';
+import { openNotification } from '../../app/notification.ios';
 
 interface BriefPreviewCardProps {
   quiz: Quiz;
@@ -27,7 +28,7 @@ const BriefPreviewCard = ({
     if (token !== '' && token !== undefined) {
       deleteQuiz({ id: quiz.id.toString() }, token)
         .then(() => {
-          Alert.alert('delete successfully');
+          openNotification(stringPreview(quiz.title), 'Quiz was Deleted');
           doReload(true);
         })
         .catch(ErrAlert);
@@ -38,7 +39,7 @@ const BriefPreviewCard = ({
     if (token !== undefined && token !== '') {
       updateQuiz(quiz.permalink, { published: true }, token)
         .then(() => {
-          Alert.alert('Quiz updated');
+          openNotification(stringPreview(quiz.title), 'Quiz was Publish');
           doReload(true);
         })
         .catch(ErrAlert);

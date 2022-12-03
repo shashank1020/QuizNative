@@ -10,6 +10,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import CreateQuiz from './src/screen/Create';
 import { useAppSelector } from './src/app/hooks';
 import { currentUser } from './src/features/quiz/quizSlice';
+import Result from './src/screen/Result';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -24,8 +25,11 @@ const App = () => {
           component={Root}
           options={{ headerShown: false }}
         />
-        {User.email !== '' && <Stack.Screen name="Edit" component={CreateQuiz} />}
+        {User.email !== '' && (
+          <Stack.Screen name="Edit" component={CreateQuiz} />
+        )}
         <Stack.Screen name="PlayQuiz" component={PlayQuiz} />
+        <Stack.Screen name="Result" component={Result} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignupScreen} />
       </Stack.Navigator>

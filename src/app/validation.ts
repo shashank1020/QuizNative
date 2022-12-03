@@ -1,7 +1,10 @@
 import { Alert } from 'react-native';
 import { Question } from '../features/quiz/quizSlice';
+
 export const trim = (string: ((prevState: string) => string) | string) =>
   string.toString().replace(/ +/g, ' ');
+
+export const stringPreview = (str: string) => `${str.substring(0, 20)}...`
 
 export const ErrAlert = (e: {
   response: { data: { message: { toString: () => string } } };
@@ -117,6 +120,10 @@ export const validateQuestion = (question: Question) => {
       Alert.alert('Correct option not in options');
       return false;
     }
+  }
+  if(trim(question.title) === ''){
+    Alert.alert('Question title cannot be empty');
+    return false;
   }
   return true;
 };

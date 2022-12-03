@@ -1,26 +1,20 @@
-import { FlatList, ListRenderItemInfo, SafeAreaView, View } from 'react-native';
-import { H2, Note, P1 } from '../assest/Typography';
+import { FlatList, ListRenderItemInfo, SafeAreaView } from 'react-native';
+import { H2 } from '../assest/Typography';
 import { useEffect, useState } from 'react';
-import { ErrMsg } from '../app/validation';
+import { ErrAlert, ErrMsg } from '../app/validation';
 import { evaluateQuiz, getByPermalink } from '../API/ApiService';
-import { Question } from '../features/quiz/quizSlice';
+import { Question, setResult } from '../features/quiz/quizSlice';
 import QuestionCard from '../features/quiz/QuestionCard';
 import Button from '../components/Button';
-import Card from '../components/Card';
-
-interface Result {
-  msg: string;
-  scored: number;
-  total: number;
-  unanswered: number;
-  wrong: number;
-}
+import { useAppDispatch } from '../app/hooks';
+import { openNotification } from '../app/notification.ios';
 
 const PlayQuiz = ({ navigation, route }: any) => {
   const permalink = route.params.permalink;
   const [title, setTitle] = useState(route.params.title);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [result, setResult] = useState<Result | undefined>(undefined);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (permalink) {
       getByPermalink({ permalink })
@@ -82,29 +76,18 @@ const PlayQuiz = ({ navigation, route }: any) => {
     );
   };
   const handleSubmit = () => {
-    evaluateQuiz({ permalink, questions }).then(data => {
-      setResult(data);
-    });
+    evaluateQuiz({ permalink, questions })
+      .then(data => {
+        dispatch(setResult(data));
+        openNotification('Result', data.msg);
+        navigation.navigate('Result', {
+          params: {
+            screen: 'Dashboard',
+          },
+        });
+      })
+      .catch(ErrAlert);
   };
-
-  if (result !== undefined) {
-    return (
-      <View>
-        <Card>
-          <H2 textDecorationLine={'underline'}>Result</H2>
-          <P1>{result.msg}</P1>
-          <Note>Correct Answered: {result.scored}</Note>
-          <Note>Wrong Answered: {result.wrong}</Note>
-          <Note>Unanswered: {result.unanswered}</Note>
-        </Card>
-        <Button
-          onPress={() => navigation.navigate('Dashboard')}
-          title={'Back to Home'}
-          color={'secondary'}
-        />
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView>
