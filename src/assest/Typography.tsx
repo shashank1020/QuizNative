@@ -1,10 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import {
-  FlexStyle,
-  GestureResponderEvent,
-  StyleProp,
-  TextStyle,
-} from 'react-native';
+import React, { FunctionComponent, ReactNode } from 'react';
+import { FlexStyle, StyleProp, TextStyle } from 'react-native';
 import { Core, Neutral } from './Color';
 import { UNIT } from './Spacing';
 import styled from 'styled-components/native';
@@ -30,7 +25,7 @@ export const Text = styled.Text({
   color: Neutral.N800,
 });
 
-type AllowedTextStyles =
+export type AllowedTextStyles =
   | 'color'
   | 'textDecorationLine'
   | 'textTransform'
@@ -42,6 +37,7 @@ interface HeaderTextProps extends Pick<TextStyle, AllowedTextStyles> {
    * Please use explicitly released properties for style in `AllowedTextStyles`
    */
   style?: StyleProp<FlexStyle>;
+  children: ReactNode;
 }
 
 const HeaderText: FunctionComponent<HeaderTextProps> = ({
@@ -55,7 +51,7 @@ const HeaderText: FunctionComponent<HeaderTextProps> = ({
 
 export interface BaseTextProps extends HeaderTextProps {
   fontWeight?: Weight;
-  onPress?: (event: GestureResponderEvent) => void;
+  onPress?: (event: any) => void;
   numberOfLines?: number | undefined;
 }
 

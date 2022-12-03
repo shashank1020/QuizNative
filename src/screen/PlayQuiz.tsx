@@ -1,4 +1,4 @@
-import { FlatList, ListRenderItemInfo, SafeAreaView, View } from "react-native";
+import { FlatList, ListRenderItemInfo, SafeAreaView, View } from 'react-native';
 import { H2, Note, P1 } from '../assest/Typography';
 import { useEffect, useState } from 'react';
 import { ErrMsg } from '../app/validation';
@@ -112,10 +112,11 @@ const PlayQuiz = ({ navigation, route }: any) => {
         keyExtractor={item => item.title}
         data={questions}
         renderItem={renderer}
-        ListHeaderComponent={<H2 padding={20}>{title}</H2>}
+        ListHeaderComponent={<H2 style={{ padding: 20 }}>{title}</H2>}
         ListFooterComponent={
           <Button onPress={handleSubmit} title={'Submit'} color="primary" />
         }
+        contentContainerStyle={{ alignItems: 'center' }}
       />
     </SafeAreaView>
   );

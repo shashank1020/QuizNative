@@ -3,8 +3,8 @@ import {
   StyleProp,
   StyleSheet,
   TouchableOpacity,
+  Text,
 } from 'react-native';
-import { P1 } from '../assest/Typography';
 
 interface ButtonProps {
   onPress: any;
@@ -12,6 +12,7 @@ interface ButtonProps {
   color: 'primary' | 'secondary' | 'error' | 'link' | 'link-blue';
   style?: StyleProp<FlexStyle>;
   textStyle?: StyleProp<FlexStyle>;
+  disabled?: boolean;
 }
 
 const colorTheme = (color: string) =>
@@ -26,25 +27,33 @@ const colorTheme = (color: string) =>
 const textTheme = (color: string) =>
   color === 'link' ? 'black' : color === 'link-blue' ? 'blue' : 'white';
 
-const Button = ({ onPress, title, color, style, textStyle }: ButtonProps) => (
+const Button = ({
+  onPress,
+  title,
+  color,
+  style,
+  textStyle,
+  disabled,
+}: ButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
+    disabled={disabled}
     style={[
+      { backgroundColor: disabled ? 'lightgray' : colorTheme(color) },
       styles.appButtonContainer,
-      { backgroundColor: colorTheme(color) },
       style,
     ]}>
-    <P1
-      textDecorationLine={color === 'link' ? 'underline' : 'none'}
+    <Text
       style={[
         styles.appButtonText,
         {
           color: textTheme(color),
+          textDecorationLine: color === 'link' ? 'underline' : 'none',
         },
         textStyle,
       ]}>
       {title}
-    </P1>
+    </Text>
   </TouchableOpacity>
 );
 
@@ -59,9 +68,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   appButtonText: {
-    fontSize: 18,
     fontWeight: 'bold',
     alignSelf: 'center',
     textTransform: 'uppercase',
+    fontSize: 16,
+    lineHeight: 28,
   },
 });

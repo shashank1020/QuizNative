@@ -15,6 +15,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+  const User = useAppSelector(currentUser);
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -23,6 +24,7 @@ const App = () => {
           component={Root}
           options={{ headerShown: false }}
         />
+        {User.email !== '' && <Stack.Screen name="Edit" component={CreateQuiz} />}
         <Stack.Screen name="PlayQuiz" component={PlayQuiz} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignupScreen} />

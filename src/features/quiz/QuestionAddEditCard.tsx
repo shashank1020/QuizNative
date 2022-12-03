@@ -15,13 +15,21 @@ import {
 interface QuestionAddEditCardProps {
   index: number;
   question: Question;
-  onQuestionUpdate: any;
+  onQuestionUpdate: (arg: Question) => void;
+  setAdd?: any;
+  setEdit?: any;
+  totalQues?: number;
+  deleteQuestion: any;
 }
 
 const QuestionAddEditCard = ({
   index,
   question,
   onQuestionUpdate,
+  setAdd,
+  setEdit,
+  totalQues,
+  deleteQuestion,
 }: QuestionAddEditCardProps) => {
   const [title, setTitle] = useState(question.title);
   const [options, setOptions] = useState<string[]>(question.options);
@@ -78,8 +86,28 @@ const QuestionAddEditCard = ({
         />
       </View>
       {options.map((option, ind) => (
-        <View style={[style.rowView, { justifyContent: 'space-evenly' }]}>
-          <CheckBox value={correctOptions.includes(option)} />
+        <View
+          style={[style.rowView, { justifyContent: 'space-evenly' }]}
+          key={ind + option}>
+          <CheckBox
+            value={correctOptions.includes(option)}
+            onValueChange={() => {
+              if (correctOptions.includes(option)) {
+                const indexNumber = correctOptions.indexOf(option);
+                const newCorrectOptions = correctOptions;
+                newCorrectOptions.splice(indexNumber, 1);
+                setCorrectOptions([...newCorrectOptions]);
+              } else {
+                if (type === 'multiple') {
+                  correctOptions.push(option);
+                  setCorrectOptions([...correctOptions]);
+                } else {
+                  setCorrectOptions([option]);
+                }
+              }
+            }}
+            disabled={option === ''}
+          />
           <CTextInput
             value={option}
             setValue={value => {
@@ -87,6 +115,15 @@ const QuestionAddEditCard = ({
               newOptions[ind] = trim(value);
               setOptions(newOptions);
             }}
+            autoFocus
+          />
+          <Button
+            onPress={() => {
+              options.splice(ind, 1);
+              setOptions([...options]);
+            }}
+            title={'x'}
+            color={'error'}
           />
         </View>
       ))}
@@ -101,17 +138,21 @@ const QuestionAddEditCard = ({
         )}
         {options.length > 1 && (
           <Button
-            onPress={() => {}}
+            onPress={handleSave}
             title={'Save'}
             color={'secondary'}
             style={style.button}
           />
         )}
       </View>
-      {index > 0 && (
+      {totalQues && totalQues > 1 && (
         <Button
           onPress={() => {
-            console.log('used');
+            setAdd(false);
+            setEdit(null);
+            if (question.title === '' || question.options.length < 2) {
+              deleteQuestion(index);
+            }
           }}
           title={'x'}
           color={'error'}
@@ -126,7 +167,6 @@ export default QuestionAddEditCard;
 
 const style = StyleSheet.create({
   card: {
-    width: 350,
     marginTop: 30,
   },
   rowView: {

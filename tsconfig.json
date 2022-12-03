@@ -24,7 +24,10 @@
     "strictBindCallApply": true,
     "strictNullChecks": true,
     "target": "es6",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "types": [
+      "@types/styled-components-react-native"qq
+    ]
   },
   "include": [
     "**/*.ts",

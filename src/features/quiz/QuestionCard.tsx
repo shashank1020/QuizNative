@@ -1,37 +1,69 @@
 import { StyleSheet, View } from 'react-native';
 import { Question } from './quizSlice';
-import { H3, Note, P1 } from '../../assest/Typography';
+import { Note, P1, P2, Weight } from "../../assest/Typography";
 import CheckBox from '@react-native-community/checkbox';
 import Card from '../../components/Card';
+import Button from '../../components/Button';
 
 interface QuestionCardProps {
   question: Question;
   index: number;
-  updateChosenOption: any;
+  updateChosenOption?: any;
+  deleteQuestion?: any;
+  isPublished?: boolean;
+  setEdit?: any;
+  isCreateScreen?: boolean | undefined;
 }
 
 const QuestionCard = ({
   index,
-  question: { chosenOptions, options, title, type },
+  question: { chosenOptions, options, title, type, correctOptions },
   updateChosenOption,
+  deleteQuestion,
+  isPublished,
+  setEdit,
+  isCreateScreen,
 }: QuestionCardProps) => {
   return (
-    <Card>
+    <Card style={{ width: 350}}>
       <View style={style.pillBadge}>
         <Note>{type} choice</Note>
       </View>
-      <H3 paddingTop={10}>{title}</H3>
+      <P2 fontWeight={Weight.SEMIBOLD} style={{ paddingTop: 10 }}>
+        Question {index + 1}: {title}
+      </P2>
       {options.length > 0 &&
         options.map(option => (
-          <View style={style.checkboxContainer}>
+          <View style={style.checkboxContainer} key={option}>
             <CheckBox
-              value={chosenOptions?.includes(option) || false}
+              value={
+                isCreateScreen
+                  ? correctOptions?.includes(option)
+                  : chosenOptions?.includes(option)
+              }
               onValueChange={e => updateChosenOption(index, option, e)}
               style={style.checkbox}
+              disabled={isCreateScreen}
             />
-            <P1 flex={1}>{option}</P1>
+            <P1 style={{ flex: 1 }}>{option}</P1>
           </View>
         ))}
+      {isCreateScreen && !isPublished && (
+        <View style={style.rowView}>
+          <Button
+            onPress={() => deleteQuestion(index)}
+            title={'Delete'}
+            color={'error'}
+            style={style.button}
+          />
+          <Button
+            onPress={() => setEdit(index)}
+            title={'Edit'}
+            color={'secondary'}
+            style={style.button}
+          />
+        </View>
+      )}
     </Card>
   );
 };
@@ -57,5 +89,14 @@ const style = StyleSheet.create({
     borderColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 5,
+  },
+  button: {
+    flex: 1,
+  },
+  rowView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

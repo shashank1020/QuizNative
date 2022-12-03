@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Question } from '../features/quiz/quizSlice';
 interface LoginProp {
   email: string;
   password: string;
@@ -21,9 +22,7 @@ export const loginUser = async ({ email, password }: LoginProp) => {
   return axios
     .post(`${BASEURL}/user/login`, { email, password })
     .then(response => response.data);
-
 };
-
 
 export const signUp = ({ name, email, password }: SignupProp) =>
   axios
@@ -53,7 +52,11 @@ export const deleteQuiz = ({ id }: { id: string }, token: string) => {
 
 export const updateQuiz = (
   permalink: string,
-  { questions, title, published }: any,
+  {
+    questions,
+    title,
+    published,
+  }: { questions?: Question[]; title?: string; published?: boolean },
   token: string,
 ) => {
   return axios
@@ -70,7 +73,11 @@ export const updateQuiz = (
 };
 
 export const createQuiz = (
-  { title, questions, published }: any,
+  {
+    title,
+    questions,
+    published,
+  }: { questions?: Question[]; title?: string; published?: boolean },
   token: string,
 ) => {
   return axios

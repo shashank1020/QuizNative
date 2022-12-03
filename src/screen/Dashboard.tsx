@@ -14,6 +14,7 @@ import BriefPreviewCard from '../features/quiz/BriefPreviewCard';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useIsFocused } from '@react-navigation/native';
 import CustomButton from '../components/Button';
+import { ErrAlert } from '../app/validation';
 
 const DashboardBase = ({ navigation, route }: any) => {
   const isFocused = useIsFocused();
@@ -22,22 +23,25 @@ const DashboardBase = ({ navigation, route }: any) => {
   const User = useAppSelector(currentUser);
   const dispatch = useAppDispatch();
   const page = 1;
+  const [reload, doReload] = useState(false);
 
   useEffect(() => {
     if (_screen === 'MyQuiz' && User.token !== '') {
       getAllQuiz({ page }, User.token)
         .then(data => {
           setAllQuizData(data?.quizes);
+          doReload(false);
         })
-        .catch(() => navigation.navigate('404'));
+        .catch(ErrAlert);
     } else {
       getAllQuiz({ page })
         .then(data => {
           setAllQuizData(data?.quizes);
+          doReload(false);
         })
-        .catch(() => navigation.navigate('404'));
+        .catch(ErrAlert);
     }
-  }, [User.token, _screen, isFocused]);
+  }, [User.token, _screen, isFocused, navigation, reload]);
 
   const handlePlay = (permalink: string, title: string) => {
     navigation.navigate('PlayQuiz', { permalink, title });
@@ -48,8 +52,11 @@ const DashboardBase = ({ navigation, route }: any) => {
     const title = item.title;
     return (
       <BriefPreviewCard
+        navigation={navigation}
         quiz={item}
         handlePlay={() => handlePlay(permalink, title)}
+        isMyQuiz={_screen === 'MyQuiz' && User.token !== ''}
+        doReload={doReload}
       />
     );
   };
