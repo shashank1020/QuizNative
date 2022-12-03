@@ -1,5 +1,7 @@
 import { Alert } from 'react-native';
 import { Question } from '../features/quiz/quizSlice';
+export const trim = (string: ((prevState: string) => string) | string) =>
+  string.toString().replace(/ +/g, ' ');
 
 export const ErrAlert = (e: {
   response: { data: { message: { toString: () => string } } };

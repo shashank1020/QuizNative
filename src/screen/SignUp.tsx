@@ -11,7 +11,7 @@ import { signUp } from '../API/ApiService';
 import { ErrAlert, validateEmail, validatePassword } from '../app/validation';
 import Button from '../components/Button';
 import Card from '../components/Card';
-import CTextInput from "../components/TextInput";
+import CTextInput from '../components/TextInput';
 
 const SignupScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -29,40 +29,41 @@ const SignupScreen = ({ navigation }: any) => {
     }
   };
   return (
-    <View style={{ alignItems: 'center' }}>
-      <StatusBar />
-      <SafeAreaView>
-        <Card>
-          <CTextInput
-            value={name}
-            setValue={setName}
-            placeholder={'Enter Name'}
-          />
-          <CTextInput
-            value={email}
-            setValue={setEmail}
-            placeholder={'Enter Email'}
-          />
-          <CTextInput
-            value={password}
-            setValue={setPassword}
-            placeholder={'Enter Password'}
-            isPassword
-          />
-
-          <Button
-            title={'Sign Up Now'}
-            onPress={handleSignup}
-            color="secondary"
-          />
-        </Card>
-        <Button
-          title={'Dont have Account? \n Sign up here '}
-          onPress={() => navigation.navigate('Login')}
-          color="link"
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Card>
+        <CTextInput
+          style={styles.input}
+          value={name}
+          setValue={setName}
+          placeholder={'Enter Name'}
         />
-      </SafeAreaView>
-    </View>
+        <CTextInput
+          style={styles.input}
+          value={email}
+          setValue={setEmail}
+          placeholder={'Enter Email'}
+        />
+        <CTextInput
+          style={styles.input}
+          value={password}
+          setValue={setPassword}
+          placeholder={'Enter Password'}
+          isPassword
+        />
+
+        <Button
+          title={'Sign Up Now'}
+          onPress={handleSignup}
+          color="secondary"
+        />
+      </Card>
+      <Button
+        title={'Dont have Account? \n Sign up here '}
+        onPress={() => navigation.navigate('Login')}
+        color="link"
+      />
+    </SafeAreaView>
   );
 };
 
@@ -70,18 +71,6 @@ export default SignupScreen;
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-    fontSize: 20,
     width: 250,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#bbbbf3',
-    padding: 10,
-    borderRadius: 10,
-    margin: 5,
   },
 });

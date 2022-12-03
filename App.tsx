@@ -42,7 +42,11 @@ function Root() {
       screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="Dashboard" component={Dashboard} />
       {User.email !== '' && (
-        <Drawer.Screen name="MyQuiz" component={Dashboard} options={{headerShown: true}}/>
+        <Drawer.Screen
+          name="MyQuiz"
+          component={Dashboard}
+          options={{ headerShown: true }}
+        />
       )}
       {User.email !== '' && (
         <Drawer.Screen name="Create" component={CreateQuiz} />

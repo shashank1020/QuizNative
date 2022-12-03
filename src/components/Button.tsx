@@ -1,10 +1,17 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  FlexStyle,
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { P1 } from '../assest/Typography';
 
 interface ButtonProps {
   onPress: any;
   title: string;
-  color: 'primary' | 'secondary' | 'error' | 'link';
+  color: 'primary' | 'secondary' | 'error' | 'link' | 'link-blue';
+  style?: StyleProp<FlexStyle>;
+  textStyle?: StyleProp<FlexStyle>;
 }
 
 const colorTheme = (color: string) =>
@@ -16,15 +23,25 @@ const colorTheme = (color: string) =>
     ? 'red'
     : '';
 
-const Button = ({ onPress, title, color }: ButtonProps) => (
+const textTheme = (color: string) =>
+  color === 'link' ? 'black' : color === 'link-blue' ? 'blue' : 'white';
+
+const Button = ({ onPress, title, color, style, textStyle }: ButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[styles.appButtonContainer, { backgroundColor: colorTheme(color) }]}>
+    style={[
+      styles.appButtonContainer,
+      { backgroundColor: colorTheme(color) },
+      style,
+    ]}>
     <P1
       textDecorationLine={color === 'link' ? 'underline' : 'none'}
       style={[
         styles.appButtonText,
-        { color: color === 'link' ? 'black' : 'white' },
+        {
+          color: textTheme(color),
+        },
+        textStyle,
       ]}>
       {title}
     </P1>

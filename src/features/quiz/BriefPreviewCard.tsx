@@ -6,7 +6,7 @@ import Button from '../../components/Button';
 
 interface BriefPreviewCardProps {
   quiz: Quiz;
-  handlePlay: any;
+  handlePlay: () => void;
 }
 
 const BriefPreviewCard = ({ quiz, handlePlay }: BriefPreviewCardProps) => {

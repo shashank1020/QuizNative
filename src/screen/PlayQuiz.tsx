@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, View } from 'react-native';
+import { FlatList, ListRenderItemInfo, SafeAreaView, View } from "react-native";
 import { H2, Note, P1 } from '../assest/Typography';
 import { useEffect, useState } from 'react';
 import { ErrMsg } from '../app/validation';
@@ -72,11 +72,11 @@ const PlayQuiz = ({ navigation, route }: any) => {
     setQuestions(newQuestion);
   };
 
-  const renderer = (item: any) => {
+  const renderer = ({ item, index }: ListRenderItemInfo<Question>) => {
     return (
       <QuestionCard
-        question={item.item}
-        index={item.index}
+        question={item}
+        index={index}
         updateChosenOption={updateChosenOption}
       />
     );

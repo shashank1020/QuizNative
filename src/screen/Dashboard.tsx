@@ -1,8 +1,15 @@
-import { SafeAreaView, View, Button, FlatList, StyleSheet } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Button,
+  FlatList,
+  StyleSheet,
+  ListRenderItemInfo,
+} from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAllQuiz } from '../API/ApiService';
 import { currentUser, doLogout, Quiz } from '../features/quiz/quizSlice';
-import { B1, B2, H1, H3, H4, P1, SecondaryCTA } from '../assest/Typography';
+import { H1, H4, P1, SecondaryCTA } from '../assest/Typography';
 import BriefPreviewCard from '../features/quiz/BriefPreviewCard';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useIsFocused } from '@react-navigation/native';
@@ -18,13 +25,17 @@ const DashboardBase = ({ navigation, route }: any) => {
 
   useEffect(() => {
     if (_screen === 'MyQuiz' && User.token !== '') {
-      getAllQuiz({ page }, User.token).then(data => {
-        setAllQuizData(data?.quizes);
-      });
+      getAllQuiz({ page }, User.token)
+        .then(data => {
+          setAllQuizData(data?.quizes);
+        })
+        .catch(() => navigation.navigate('404'));
     } else {
-      getAllQuiz({ page }).then(data => {
-        setAllQuizData(data?.quizes);
-      });
+      getAllQuiz({ page })
+        .then(data => {
+          setAllQuizData(data?.quizes);
+        })
+        .catch(() => navigation.navigate('404'));
     }
   }, [User.token, _screen, isFocused]);
 
@@ -32,18 +43,18 @@ const DashboardBase = ({ navigation, route }: any) => {
     navigation.navigate('PlayQuiz', { permalink, title });
   };
 
-  const renderer = (item: { item: Quiz }) => {
-    const permalink = item.item.permalink;
-    const title = item.item.title;
+  const renderer = ({ item }: ListRenderItemInfo<Quiz>) => {
+    const permalink = item.permalink;
+    const title = item.title;
     return (
       <BriefPreviewCard
-        quiz={item.item}
+        quiz={item}
         handlePlay={() => handlePlay(permalink, title)}
       />
     );
   };
 
-  if (allQuizData.length === 0) {
+  if (allQuizData.length === 0 && User.email !== '') {
     return (
       <SafeAreaView>
         <SecondaryCTA>Its Empty...</SecondaryCTA>

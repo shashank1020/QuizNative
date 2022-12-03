@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { createAsyncThunk } from "@reduxjs/toolkit";
-
 interface LoginProp {
   email: string;
   password: string;

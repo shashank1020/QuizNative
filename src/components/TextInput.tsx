@@ -7,6 +7,7 @@ interface CTextInputProps {
   style?: StyleProp<FlexStyle>;
   placeholder?: string;
   isPassword?: boolean;
+  maxLength?: number;
 }
 
 const CTextInput = ({
@@ -15,6 +16,7 @@ const CTextInput = ({
   style,
   placeholder,
   isPassword = false,
+  maxLength,
 }: CTextInputProps) => (
   <TextInput
     style={[styles.input, style]}
@@ -23,6 +25,7 @@ const CTextInput = ({
     placeholder={placeholder ?? ''}
     autoCapitalize={'none'}
     secureTextEntry={isPassword}
+    maxLength={maxLength}
   />
 );
 
@@ -35,6 +38,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     fontSize: 20,
-    width: 250,
+    minWidth: 200,
+    maxWidth: 240,
   },
 });

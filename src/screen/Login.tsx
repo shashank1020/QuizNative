@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView} from 'react-native';
+import { Alert, SafeAreaView, StyleSheet } from "react-native";
 import { useState } from 'react';
 import { validateEmail, validatePassword } from '../app/validation';
 import { doLogin } from '../features/quiz/quizSlice';
@@ -27,11 +27,13 @@ const LoginScreen = (props: any) => {
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Card>
         <CTextInput
+          style={styles.input}
           value={email}
           setValue={setEmail}
           placeholder={'Enter Email'}
         />
         <CTextInput
+          style={styles.input}
           value={password}
           setValue={setPassword}
           placeholder={'Enter Password'}
@@ -49,3 +51,9 @@ const LoginScreen = (props: any) => {
 };
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  input: {
+    width: 250,
+  },
+});

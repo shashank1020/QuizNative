@@ -6,26 +6,27 @@ import Card from '../../components/Card';
 
 interface QuestionCardProps {
   question: Question;
-  index: string;
+  index: number;
   updateChosenOption: any;
 }
 
-const QuestionCard = (props: QuestionCardProps) => {
-  const question = props.question;
+const QuestionCard = ({
+  index,
+  question: { chosenOptions, options, title, type },
+  updateChosenOption,
+}: QuestionCardProps) => {
   return (
     <Card>
       <View style={style.pillBadge}>
-        <Note>{question.type} choice</Note>
+        <Note>{type} choice</Note>
       </View>
-      <H3 paddingTop={10}>{question.title}</H3>
-      {question.options.length > 0 &&
-        question.options.map(option => (
+      <H3 paddingTop={10}>{title}</H3>
+      {options.length > 0 &&
+        options.map(option => (
           <View style={style.checkboxContainer}>
             <CheckBox
-              value={question?.chosenOptions?.includes(option) || false}
-              onValueChange={e =>
-                props.updateChosenOption(props.index, option, e)
-              }
+              value={chosenOptions?.includes(option) || false}
+              onValueChange={e => updateChosenOption(index, option, e)}
               style={style.checkbox}
             />
             <P1 flex={1}>{option}</P1>
