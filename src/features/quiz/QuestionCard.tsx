@@ -1,6 +1,7 @@
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Question } from './quizSlice';
-import { Note, P1, P2, Weight } from "../../assest/Typography";
+import { Note, P1, P2, Weight } from '../../assest/Typography';
 import CheckBox from '@react-native-community/checkbox';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
@@ -25,7 +26,7 @@ const QuestionCard = ({
   isCreateScreen,
 }: QuestionCardProps) => {
   return (
-    <Card style={{ width: 350}}>
+    <Card style={{ width: 350 }}>
       <View style={style.pillBadge}>
         <Note>{type} choice</Note>
       </View>

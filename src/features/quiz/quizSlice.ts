@@ -16,7 +16,7 @@ export interface Quiz {
   title: string;
   published: boolean;
   questionCount: number;
-  questions: Array<Question>;
+  questions?: Array<Question>;
 }
 export interface Result {
   msg: string;
@@ -32,7 +32,9 @@ interface User {
 }
 interface QuizState {
   currentUser: User;
-  quiz: Quiz | {};
+  publishedQuiz: Quiz[] | null | undefined;
+  myQuiz: Quiz[] | null | undefined;
+  playQuiz: Quiz | {};
   result: Result;
 }
 
@@ -42,7 +44,9 @@ const initialState: QuizState = {
     name: '',
     email: '',
   },
-  quiz: {},
+  publishedQuiz: [],
+  myQuiz: [],
+  playQuiz: {},
   result: {
     msg: '',
     scored: undefined,
@@ -60,7 +64,7 @@ export const quizSlice = createSlice({
       state.currentUser = payload;
     },
     doLogout: state => {
-      state.quiz = {};
+      state.myQuiz = undefined;
       state.currentUser = {
         token: '',
         name: '',
@@ -68,19 +72,22 @@ export const quizSlice = createSlice({
       };
     },
     setPublishedQuiz: (state, { payload }) => {
-      state.quiz = payload;
+      state.publishedQuiz = payload;
     },
     setMyQuiz: (state, { payload }) => {
-      state.quiz = payload;
+      state.myQuiz = payload;
     },
     setResult: (state, { payload }) => {
       state.result = payload;
     },
   },
 });
-export const { doLogin, doLogout, setPublishedQuiz, setResult } =
+
+export const currentUser = (state: RootState) => state.quiz.currentUser;
+export const publishedQuiz = (state: RootState) => state.quiz.publishedQuiz;
+export const myQuiz = (state: RootState) => state.quiz.myQuiz;
+export const result = (state: RootState) => state.quiz.result;
+
+export const { doLogin, doLogout, setMyQuiz, setPublishedQuiz, setResult } =
   quizSlice.actions;
 export default quizSlice.reducer;
-export const currentUser = (state: RootState) => state.quiz.currentUser;
-export const publishedQuiz = (state: RootState) => state.quiz.quiz;
-export const result = (state: RootState) => state.quiz.result;

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { currentUser, Quiz } from './quizSlice';
 import { H3, P1, PrimaryCTA } from '../../assest/Typography';
@@ -14,6 +15,7 @@ interface BriefPreviewCardProps {
   isMyQuiz: boolean;
   navigation: any;
   doReload: any;
+  index: number
 }
 
 const BriefPreviewCard = ({
@@ -22,8 +24,10 @@ const BriefPreviewCard = ({
   isMyQuiz,
   navigation,
   doReload,
+  index
 }: BriefPreviewCardProps) => {
   const { token } = useAppSelector(currentUser);
+
   const handleDelete = () => {
     if (token !== '' && token !== undefined) {
       deleteQuiz({ id: quiz.id.toString() }, token)
@@ -48,7 +52,7 @@ const BriefPreviewCard = ({
   return (
     <View style={style.container}>
       <Card style={{ width: 350 }}>
-        <H3 style={{ marginBottom: 30 }}>{quiz.title}</H3>
+        <H3 style={{ marginBottom: 30 }}>{index+1} {quiz.title}</H3>
         <View style={style.info}>
           <P1>Total Question: {quiz.questionCount}</P1>
           <PrimaryCTA>#{quiz.permalink}</PrimaryCTA>

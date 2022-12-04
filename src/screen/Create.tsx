@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Alert,
   FlatList,
@@ -6,9 +7,9 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { H2, H4 } from '../assest/Typography';
+import { H4 } from '../assest/Typography';
 import { currentUser, Question } from '../features/quiz/quizSlice';
-import CTextInput from '../components/TextInput';
+import TextInput from '../components/TextInput';
 import { useCallback, useState } from 'react';
 import Button from '../components/Button';
 import QuestionAddEditCard from '../features/quiz/QuestionAddEditCard';
@@ -38,7 +39,7 @@ const CreateQuiz = ({ navigation, route }: any) => {
   const [questions, setQuestions] = useState<Question[]>([emptyCardValues]);
   const [editIndex, setEditIndex] = useState<null | number>(null);
   const [isPublished, setIsPublished] = useState(false);
-  const [add, setAdd] = useState(false);
+  const [shouldAddButtonDisabled, setShouldAddButtonDisabled] = useState(false);
   const User = useAppSelector(currentUser);
 
   const handleSaveQuiz = () => {
@@ -55,11 +56,8 @@ const CreateQuiz = ({ navigation, route }: any) => {
       } else {
         if (permalink && User.token) {
           updateQuiz(permalink, { title: quizTitle, questions }, User.token)
-            .then(data => {
+            .then(() => {
               openNotification(stringPreview(quizTitle), 'Quiz was updated');
-              setQuizTitle(data.title);
-              setQuestions(data.questions);
-              setIsPublished(data.published);
               navigation.navigate('MyQuiz');
             })
             .catch(ErrAlert);
@@ -67,6 +65,7 @@ const CreateQuiz = ({ navigation, route }: any) => {
       }
     }
   };
+
   const onQuestionUpdate = (newQues: Question) => {
     if (isNumber(editIndex)) {
       questions[editIndex] = newQues;
@@ -74,21 +73,22 @@ const CreateQuiz = ({ navigation, route }: any) => {
     } else {
       setQuestions([newQues, ...questions]);
     }
-    setAdd(false);
+    setShouldAddButtonDisabled(false);
     setEditIndex(null);
   };
 
   const deleteQuestion = (index: number) => {
     questions.splice(index, 1);
     setQuestions([...questions]);
-    setAdd(false);
+    setShouldAddButtonDisabled(false);
   };
+
   const ButtonGroup = () => (
-    <>
+    <View>
       <Button
         onPress={() => {
           if (questions.length < 10) {
-            setAdd(true);
+            setShouldAddButtonDisabled(true);
             setQuestions(prevState => [emptyCardValues, ...prevState]);
             setEditIndex(0);
           } else {
@@ -97,7 +97,7 @@ const CreateQuiz = ({ navigation, route }: any) => {
         }}
         title={'Add Question'}
         color={'primary'}
-        disabled={add || questions.length === 10}
+        disabled={shouldAddButtonDisabled || questions.length === 10}
       />
       <Button
         onPress={handleSaveQuiz}
@@ -105,7 +105,7 @@ const CreateQuiz = ({ navigation, route }: any) => {
         color={'secondary'}
         disabled={questions.length < 1}
       />
-    </>
+    </View>
   );
 
   const render = ({ item, index }: ListRenderItemInfo<Question>) => {
@@ -127,7 +127,7 @@ const CreateQuiz = ({ navigation, route }: any) => {
             index={index}
             onQuestionUpdate={onQuestionUpdate}
             setEdit={setEditIndex}
-            setAdd={setAdd}
+            setAdd={setShouldAddButtonDisabled}
             deleteQuestion={deleteQuestion}
           />
         )}
@@ -151,19 +151,16 @@ const CreateQuiz = ({ navigation, route }: any) => {
         setQuizTitle('');
         setIsPublished(false);
         setEditIndex(0);
-        setAdd(true);
+        setShouldAddButtonDisabled(true);
       }
     }, [permalink, route.name, User.token]),
   );
 
   return (
     <SafeAreaView style={style.container}>
-      {route.name === 'Create' && (
-        <H2 style={{ marginVertical: 10 }}>Create</H2>
-      )}
       <View style={style.rowView}>
         <H4>Quiz Name:</H4>
-        <CTextInput
+        <TextInput
           value={quizTitle}
           setValue={setQuizTitle}
           maxLength={30}

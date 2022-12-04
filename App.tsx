@@ -42,17 +42,14 @@ export default App;
 function Root() {
   const User = useAppSelector(currentUser);
   return (
-    <Drawer.Navigator
-      useLegacyImplementation
-      initialRouteName="Home"
-      screenOptions={{ headerShown: false }}>
-      <Drawer.Screen name="Dashboard" component={Dashboard} />
+    <Drawer.Navigator useLegacyImplementation initialRouteName="Home">
+      <Drawer.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{ headerShown: false }}
+      />
       {User.email !== '' && (
-        <Drawer.Screen
-          name="MyQuiz"
-          component={Dashboard}
-          options={{ headerShown: true }}
-        />
+        <Drawer.Screen name="MyQuiz" component={Dashboard} />
       )}
       {User.email !== '' && (
         <Drawer.Screen name="Create" component={CreateQuiz} />

@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-
+import * as React from 'react';
 interface ButtonProps {
   onPress: any;
   title: string;

@@ -8,7 +8,7 @@ interface CTextInputProps {
   placeholder?: string;
   isPassword?: boolean;
   maxLength?: number;
-  autoFocus?: boolean
+  autoFocus?: boolean;
 }
 
 const CTextInput = ({
@@ -18,7 +18,7 @@ const CTextInput = ({
   placeholder,
   isPassword = false,
   maxLength,
-                      autoFocus
+  autoFocus,
 }: CTextInputProps) => (
   <TextInput
     style={[styles.input, style]}

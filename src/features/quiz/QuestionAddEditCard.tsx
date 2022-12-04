@@ -1,7 +1,8 @@
+import * as React from 'react';
 import { StyleSheet, Switch, View } from 'react-native';
 import Card from '../../components/Card';
 import { P2, Weight } from '../../assest/Typography';
-import CTextInput from '../../components/TextInput';
+import TextInput from '../../components/TextInput';
 import { useState } from 'react';
 import Button from '../../components/Button';
 import { Question } from './quizSlice';
@@ -64,7 +65,7 @@ const QuestionAddEditCard = ({
     <Card style={style.card}>
       <View style={style.rowView}>
         <P2 fontWeight={Weight.SEMIBOLD}>Question {index + 1}:</P2>
-        <CTextInput
+        <TextInput
           value={title}
           setValue={setTitle}
           placeholder="E.g: What are Promise?"
@@ -108,7 +109,7 @@ const QuestionAddEditCard = ({
             }}
             disabled={option === ''}
           />
-          <CTextInput
+          <TextInput
             value={option}
             setValue={value => {
               const newOptions = [...options];

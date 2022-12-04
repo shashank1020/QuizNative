@@ -8,7 +8,15 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAllQuiz } from '../API/ApiService';
-import { currentUser, doLogout, Quiz } from '../features/quiz/quizSlice';
+import {
+  currentUser,
+  doLogout,
+  myQuiz,
+  publishedQuiz,
+  Quiz,
+  setMyQuiz,
+  setPublishedQuiz,
+} from '../features/quiz/quizSlice';
 import { H1, H4, P1, SecondaryCTA } from '../assest/Typography';
 import BriefPreviewCard from '../features/quiz/BriefPreviewCard';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -16,44 +24,47 @@ import { useIsFocused } from '@react-navigation/native';
 import CustomButton from '../components/Button';
 import { ErrAlert } from '../app/validation';
 
-const DashboardBase = ({ navigation, route }: any) => {
+const Dashboard = ({ navigation, route }: any) => {
   const isFocused = useIsFocused();
-  const [allQuizData, setAllQuizData] = useState<Quiz[]>([]);
   const _screen = route.name;
   const User = useAppSelector(currentUser);
+  const allQuiz = useAppSelector(publishedQuiz);
+  const UserQuiz = useAppSelector(myQuiz);
   const dispatch = useAppDispatch();
   const page = 1;
   const [reload, doReload] = useState(false);
+  let pageQuiz = _screen === 'Dashboard' ? allQuiz : UserQuiz;
 
   useEffect(() => {
     if (_screen === 'MyQuiz' && User.token !== '') {
       getAllQuiz({ page }, User.token)
         .then(data => {
-          setAllQuizData(data?.quizes);
+          dispatch(setMyQuiz(data?.quizes));
           doReload(false);
         })
         .catch(ErrAlert);
     } else {
       getAllQuiz({ page })
         .then(data => {
-          setAllQuizData(data?.quizes);
+          dispatch(setPublishedQuiz(data?.quizes));
           doReload(false);
         })
         .catch(ErrAlert);
     }
-  }, [User.token, _screen, isFocused, navigation, reload]);
+  }, [User.token, _screen, dispatch, isFocused, navigation, reload]);
 
   const handlePlay = (permalink: string, title: string) => {
     navigation.navigate('PlayQuiz', { permalink, title });
   };
 
-  const renderer = ({ item }: ListRenderItemInfo<Quiz>) => {
+  const renderer = ({ item, index }: ListRenderItemInfo<Quiz>) => {
     const permalink = item.permalink;
     const title = item.title;
     return (
       <BriefPreviewCard
         navigation={navigation}
         quiz={item}
+        index={index}
         handlePlay={() => handlePlay(permalink, title)}
         isMyQuiz={_screen === 'MyQuiz' && User.token !== ''}
         doReload={doReload}
@@ -61,7 +72,7 @@ const DashboardBase = ({ navigation, route }: any) => {
     );
   };
 
-  if (allQuizData.length === 0 && User.email !== '') {
+  if (_screen === 'MyQuiz' && !UserQuiz && User.email !== '') {
     return (
       <SafeAreaView>
         <SecondaryCTA>Its Empty...</SecondaryCTA>
@@ -103,14 +114,14 @@ const DashboardBase = ({ navigation, route }: any) => {
       </View>
       <FlatList
         keyExtractor={item => String(item.id)}
-        data={allQuizData}
+        data={pageQuiz}
         renderItem={renderer}
       />
     </SafeAreaView>
   );
 };
 
-export default DashboardBase;
+export default Dashboard;
 
 const style = StyleSheet.create({
   container: {

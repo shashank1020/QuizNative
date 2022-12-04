@@ -1,5 +1,6 @@
 import { FlexStyle, StyleProp, StyleSheet, View } from 'react-native';
 import { ReactNode } from 'react';
+import * as React from 'react';
 
 interface CardProps {
   style?: StyleProp<FlexStyle>;

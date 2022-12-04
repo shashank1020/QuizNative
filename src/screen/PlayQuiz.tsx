@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { FlatList, ListRenderItemInfo, SafeAreaView } from 'react-native';
 import { H2 } from '../assest/Typography';
 import { useEffect, useState } from 'react';

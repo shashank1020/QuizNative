@@ -4,7 +4,7 @@ import { signUp } from '../API/ApiService';
 import { ErrAlert, validateEmail, validatePassword } from '../app/validation';
 import Button from '../components/Button';
 import Card from '../components/Card';
-import CTextInput from '../components/TextInput';
+import TextInput from '../components/TextInput';
 
 const SignupScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -25,19 +25,19 @@ const SignupScreen = ({ navigation }: any) => {
     <SafeAreaView
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Card>
-        <CTextInput
+        <TextInput
           style={styles.input}
           value={name}
           setValue={setName}
           placeholder={'Enter Name'}
         />
-        <CTextInput
+        <TextInput
           style={styles.input}
           value={email}
           setValue={setEmail}
           placeholder={'Enter Email'}
         />
-        <CTextInput
+        <TextInput
           style={styles.input}
           value={password}
           setValue={setPassword}
